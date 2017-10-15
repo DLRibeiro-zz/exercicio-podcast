@@ -1,20 +1,25 @@
 package br.ufpe.cin.if710.podcast.ui.adapter;
 
 import java.util.List;
+
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import br.ufpe.cin.if710.podcast.R;
+import br.ufpe.cin.if710.podcast.db.PodcastDownload;
 import br.ufpe.cin.if710.podcast.domain.ItemFeed;
+import br.ufpe.cin.if710.podcast.domain.ItemFeedPostDB;
 
-public class XmlFeedAdapter extends ArrayAdapter<ItemFeed> {
+public class XmlFeedAdapter extends ArrayAdapter<ItemFeedPostDB> {
 
     int linkResource;
-
-    public XmlFeedAdapter(Context context, int resource, List<ItemFeed> objects) {
+    Context context;
+    public XmlFeedAdapter(Context context, int resource, List<ItemFeedPostDB> objects) {
         super(context, resource, objects);
         linkResource = resource;
     }
@@ -35,7 +40,7 @@ public class XmlFeedAdapter extends ArrayAdapter<ItemFeed> {
 
 
 	/*
-	@Override
+    @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.itemlista, parent, false);
@@ -49,6 +54,7 @@ public class XmlFeedAdapter extends ArrayAdapter<ItemFeed> {
     static class ViewHolder {
         TextView item_title;
         TextView item_date;
+        Button item_download_play;
     }
 
     @Override
@@ -58,7 +64,19 @@ public class XmlFeedAdapter extends ArrayAdapter<ItemFeed> {
             convertView = View.inflate(getContext(), linkResource, null);
             holder = new ViewHolder();
             holder.item_title = (TextView) convertView.findViewById(R.id.item_title);
+            holder.item_title.setOnClickListener(new ItemFeedClickListener(getContext(), getItem(position), "Title"));
             holder.item_date = (TextView) convertView.findViewById(R.id.item_date);
+            holder.item_download_play = (Button) convertView.findViewById(R.id.item_download_play);
+            if (getItem(position).isDownloadStatus() && getItem(position).getPlaystatus() == 0) {
+                holder.item_download_play.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_play_circle_outline_black_24dp));
+                holder.item_download_play.setOnClickListener(new ItemFeedClickListener(getContext(),getItem(position),"Play"));
+            } else if (getItem(position).isDownloadStatus() && getItem(position).getPlaystatus() != 0) {
+                holder.item_download_play.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.ic_pause_circle_outline_black_24dp));
+                holder.item_download_play.setOnClickListener(new ItemFeedClickListener(getContext(),getItem(position),"Pause"));
+            } else {
+                holder.item_download_play.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_file_download_black_24dp));
+                holder.item_download_play.setOnClickListener(new ItemFeedClickListener(getContext(), getItem(position), "Download"));
+            }
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

@@ -1,5 +1,9 @@
 package br.ufpe.cin.if710.podcast.domain;
 
+import android.content.ContentValues;
+
+import br.ufpe.cin.if710.podcast.db.PodcastDBHelper;
+
 public class ItemFeed {
     private final String title;
     private final String link;
@@ -39,5 +43,18 @@ public class ItemFeed {
     @Override
     public String toString() {
         return title;
+    }
+
+    public ContentValues toContentValue(){
+        ContentValues cv = new ContentValues();
+        cv.put(PodcastDBHelper.EPISODE_TITLE, this.title);
+        cv.put(PodcastDBHelper.EPISODE_LINK, this.link);
+        cv.put(PodcastDBHelper.EPISODE_DESC,this.description);
+        cv.put(PodcastDBHelper.EPISODE_DOWNLOAD_LINK, this.downloadLink);
+        cv.put(PodcastDBHelper.DOWNLOADED, 0);
+        cv.put(PodcastDBHelper.PLAY_STATUS, 0);
+        cv.put(PodcastDBHelper.EPISODE_DATE, this.pubDate);
+        cv.put(PodcastDBHelper.EPISODE_FILE_URI,"");
+        return cv;
     }
 }
