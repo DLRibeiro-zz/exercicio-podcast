@@ -17,6 +17,7 @@ import br.ufpe.cin.if710.podcast.domain.ItemFeedPostDB;
 
 public class XmlFeedAdapter extends ArrayAdapter<ItemFeedPostDB> {
 
+    //Alterei o adapter para receber os novos items de ItemFeed, que possuem informações necessárias para as operações do MediaPlayer
     int linkResource;
     Context context;
     public XmlFeedAdapter(Context context, int resource, List<ItemFeedPostDB> objects) {

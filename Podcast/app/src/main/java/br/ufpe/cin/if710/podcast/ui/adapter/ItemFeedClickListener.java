@@ -25,7 +25,7 @@ public class ItemFeedClickListener implements View.OnClickListener {
         this.context = context;
         this.type = type;
     }
-
+    //OnClickListener proprio para funcionar com o itemFeed
     @Override
     public void onClick(View view) {
         if (type.equals("Download")) {
