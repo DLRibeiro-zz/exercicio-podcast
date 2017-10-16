@@ -76,9 +76,9 @@ public class PodcastPlayer extends Service {
     public long pauseMusic() {
         if (mPlayer.isPlaying()) {
             mPlayer.pause();
+            this.setCurrentPositionOnDB(mPlayer.getCurrentPosition());
             mPlayer.reset();
         }
-        this.setCurrentPositionOnDB(mPlayer.getCurrentPosition());
         return mPlayer.getCurrentPosition();
     }
 
@@ -101,7 +101,9 @@ public class PodcastPlayer extends Service {
     }
 
     public void setDataSource(String fileUri, String episodeID) throws IOException {
-        if(!this.episodeID.equals("")){
+        if(!this.episodeID.equals("") && this.mPlayer.isPlaying()){
+            this.pauseMusic();
+        }else if(!this.episodeID.equals("") && !this.mPlayer.isPlaying()){
             this.mPlayer.reset();
         }
         this.episodeID = episodeID;
@@ -111,7 +113,9 @@ public class PodcastPlayer extends Service {
     }
 
     public void setDataSource(android.net.Uri fileUri,String episodeID) throws IOException {
-        if(!this.episodeID.equals("")){
+        if(!this.episodeID.equals("") && this.mPlayer.isPlaying()){
+            this.pauseMusic();
+        }else if(!this.episodeID.equals("") && !this.mPlayer.isPlaying()){
             this.mPlayer.reset();
         }
         this.episodeID = episodeID;
