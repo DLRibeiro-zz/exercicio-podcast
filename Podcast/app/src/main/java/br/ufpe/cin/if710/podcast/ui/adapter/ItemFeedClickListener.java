@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import java.io.IOException;
+
 import br.ufpe.cin.if710.podcast.MyApplication;
 import br.ufpe.cin.if710.podcast.db.PodcastDownload;
 import br.ufpe.cin.if710.podcast.domain.ItemFeedPostDB;
@@ -40,6 +42,11 @@ public class ItemFeedClickListener implements View.OnClickListener {
         }else if(type.equals("Play")){
             MyApplication ma = (MyApplication) context;
             if(ma.isServiceBound()){
+                try {
+                    ma.getPodcastPlayer().setDataSource(this.itemFeed.getEpisode_file_uri(),""+this.itemFeed.getID());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 ma.getPodcastPlayer().playMusic(itemFeed.getPlaystatus());
             }
         }else if(type.equals("Pause")){

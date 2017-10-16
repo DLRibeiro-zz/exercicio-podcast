@@ -35,6 +35,7 @@ public class PodcastPlayer extends Service {
         super.onCreate();
         mPlayer = new MediaPlayer();
         mPlayer.setLooping(false);
+        this.episodeID = "";
         // cria notificacao na area de notificacoes para usuario voltar p/ Activity
         final Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
         final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
@@ -100,6 +101,9 @@ public class PodcastPlayer extends Service {
     }
 
     public void setDataSource(String fileUri, String episodeID) throws IOException {
+        if(!this.episodeID.equals("")){
+            this.mPlayer.reset();
+        }
         this.episodeID = episodeID;
         mPlayer.setDataSource(getApplicationContext(), android.net.Uri.parse(fileUri));
         this.fileUri = android.net.Uri.parse(fileUri);
@@ -107,6 +111,9 @@ public class PodcastPlayer extends Service {
     }
 
     public void setDataSource(android.net.Uri fileUri,String episodeID) throws IOException {
+        if(!this.episodeID.equals("")){
+            this.mPlayer.reset();
+        }
         this.episodeID = episodeID;
         mPlayer.setDataSource(getApplicationContext(), fileUri);
         this.fileUri = fileUri;
